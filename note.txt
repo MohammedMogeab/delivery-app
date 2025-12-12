@@ -1,0 +1,7 @@
+npx expo start -c
+this will clear the cache on our project and make it run if there is error or something like that 
+
+
+npx expo-doctor 
+this will install the comptable package for our expo 
+
