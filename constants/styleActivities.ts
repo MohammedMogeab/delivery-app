@@ -2,15 +2,17 @@
 import { StyleSheet } from 'react-native';
 
 export const colors = {
-    background: '#121212', // خلفية داكنة جداً
-    cardBackground: '#1E1E1E', // خلفية الأقسام الداخلية
+    background: '#0B0F14', // خلفية داكنة جداً
+    cardBackground: '#121826', // خلفية الأقسام الداخلية
     text: '#FFFFFF',
-    subText: '#AAAAAA',
-    primary: '#4CAF50', // الأخضر الأساسي
+    subText: '#94A3B8',
+    primary: '#22C55E', // الأخضر الأساسي
     danger: '#F44336', // الأحمر للإلغاء
     greenBadge: '#2E7D32', // لون البطاقة الخضراء
     greenBadgeText: '#C8E6C9',
-    border: '#333333',
+    border: '#1E293B',
+    lightBlue: '#60A5FA',
+    stepInactive: '#334155',
 };
 
 export const globalStyles = StyleSheet.create({
