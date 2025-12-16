@@ -1,14 +1,35 @@
-import React from 'react';
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import DriverButton from '@/components/driver/DriverButton';
+import DriverButton from "@/components/driver/DriverButton";
+import React from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const ProgressBar = ({ progress }: { progress: number }) => (
   <View className="w-full bg-[#07121A] rounded-full h-3 mt-3">
-    <View className="h-3 rounded-full bg-[#10B981]" style={{ width: `${Math.min(100, Math.max(0, progress))}%` }} />
+    <View
+      className="h-3 rounded-full bg-[#10B981]"
+      style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
+    />
   </View>
 );
 
-const CampaignCard = ({ title, desc, reward, progress, status }: { title: string; desc: string; reward: string; progress: number; status?: string }) => (
+const CampaignCard = ({
+  title,
+  desc,
+  reward,
+  progress,
+  status,
+}: {
+  title: string;
+  desc: string;
+  reward: string;
+  progress: number;
+  status?: string;
+}) => (
   <View className="rounded-lg bg-[#0B1220] p-4 mb-4">
     <View className="flex-row justify-between items-start">
       <View>
@@ -25,7 +46,9 @@ const CampaignCard = ({ title, desc, reward, progress, status }: { title: string
     <ProgressBar progress={progress} />
 
     <View className="flex-row items-center justify-between mt-3">
-      <Text className="text-sm text-[#94A3B8]">Reward: <Text className="text-white">{reward}</Text></Text>
+      <Text className="text-sm text-[#94A3B8]">
+        Reward: <Text className="text-white">{reward}</Text>
+      </Text>
       <TouchableOpacity className="px-3 py-2 rounded-2xl bg-[#0F172A]">
         <Text className="text-sm text-[#94A3B8]">View Details</Text>
       </TouchableOpacity>
@@ -33,13 +56,25 @@ const CampaignCard = ({ title, desc, reward, progress, status }: { title: string
   </View>
 );
 
-const Achievement = ({ label, subtitle, bg }: { label: string; subtitle?: string; bg?: string }) => (
+const Achievement = ({
+  label,
+  subtitle,
+  bg,
+}: {
+  label: string;
+  subtitle?: string;
+  bg?: string;
+}) => (
   <View className="items-center mr-4">
-    <View className={`w-14 h-14 rounded-full items-center justify-center ${bg ?? 'bg-[#065F46]'}`}>
+    <View
+      className={`w-14 h-14 rounded-full items-center justify-center ${bg ?? "bg-[#065F46]"}`}
+    >
       <Text className="text-white text-xl">🏆</Text>
     </View>
     <Text className="text-sm text-white mt-2 text-center">{label}</Text>
-    {subtitle ? <Text className="text-xs text-[#94A3B8]">{subtitle}</Text> : null}
+    {subtitle ? (
+      <Text className="text-xs text-[#94A3B8]">{subtitle}</Text>
+    ) : null}
   </View>
 );
 
@@ -51,10 +86,14 @@ export default function Reward() {
           <TouchableOpacity className="p-2 mr-3 rounded-full bg-[#0F172A]/30">
             <Text className="text-white">←</Text>
           </TouchableOpacity>
-          <Text className="text-white text-lg font-JakartaSemiBold">Rewards & Achievements</Text>
+          <Text className="text-white text-lg font-JakartaSemiBold">
+            Rewards & Achievements
+          </Text>
         </View>
 
-        <Text className="text-white font-JakartaSemiBold mb-3">Current Campaigns</Text>
+        <Text className="text-white font-JakartaSemiBold mb-3">
+          Current Campaigns
+        </Text>
 
         <CampaignCard
           title="Weekly Delivery Challenge"
@@ -72,16 +111,36 @@ export default function Reward() {
           status="Completed"
         />
 
-        <Text className="text-white font-JakartaSemiBold mb-3">Achievements</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
+        <Text className="text-white font-JakartaSemiBold mb-3">
+          Achievements
+        </Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mb-4"
+        >
           <Achievement label="100 Deliveries" subtitle="Badge" />
-          <Achievement label="Fast Deliverer" subtitle="Badge" bg="bg-[#7C3AED]" />
-          <Achievement label="Top Feedback" subtitle="Badge" bg="bg-[#2563EB]" />
-          <Achievement label="5-Star Driver" subtitle="Badge" bg="bg-[#F59E0B]" />
+          <Achievement
+            label="Fast Deliverer"
+            subtitle="Badge"
+            bg="bg-[#7C3AED]"
+          />
+          <Achievement
+            label="Top Feedback"
+            subtitle="Badge"
+            bg="bg-[#2563EB]"
+          />
+          <Achievement
+            label="5-Star Driver"
+            subtitle="Badge"
+            bg="bg-[#F59E0B]"
+          />
         </ScrollView>
 
         <View className="rounded-lg bg-[#0B1220] p-4 mb-6">
-          <Text className="text-white font-JakartaSemiBold mb-3">Reward Summary</Text>
+          <Text className="text-white font-JakartaSemiBold mb-3">
+            Reward Summary
+          </Text>
           <View className="flex-row justify-between py-2">
             <Text className="text-sm text-[#94A3B8]">Total Earned</Text>
             <Text className="text-sm text-[#10B981]">15,400 YER</Text>
@@ -96,7 +155,11 @@ export default function Reward() {
           </View>
 
           <View className="mt-4">
-            <DriverButton title="View Reward History" onPress={() => {}} variant="primary" />
+            <DriverButton
+              title="View Reward History"
+              onPress={() => {}}
+              variant="primary"
+            />
           </View>
         </View>
 
