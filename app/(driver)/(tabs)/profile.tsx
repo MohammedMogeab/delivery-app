@@ -101,6 +101,7 @@ const ProfileTab = () => {
           <DriverButton
             title="Logout"
             variant="outline"
+            onPress={() => router.replace('/(driver)/auth/create-account')}
             className="mt-4 h-14 border-[#F87171]"
             textClassName="text-[#F87171]"
           />

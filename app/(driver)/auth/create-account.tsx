@@ -119,7 +119,7 @@ const CreateAccountScreen = () => {
           Already have an account?{' '}
           <Text
             className="font-JakartaSemiBold text-[#22C55E]"
-            onPress={() => router.push('/(driver)/auth/login')}
+            onPress={() => router.push('/auth/login')}
           >
             Login
           </Text>
