@@ -120,6 +120,7 @@ const OrderConfirmationScreen = () => {
 
         <DriverButton
           title="Confirm & Accept Order"
+          onPress={() => router.replace('/(driver)/activities/PickupConfirmationScreen')}
           className="mt-6 h-14"
           disabled={!available}
         />
