@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
@@ -11,72 +12,128 @@ const OrderDetailsScreen = () => {
   const { id } = useLocalSearchParams<{ id?: string }>();
   const order = driverOrders.find((item) => item.id === id) ?? driverOrders[0];
 
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const colors = {
+    background: isDarkMode ? '#05090C' : '#F8FAFC',
+    card: isDarkMode ? '#11181C' : '#FFFFFF',
+    textPrimary: isDarkMode ? '#FFFFFF' : '#0F172A',
+    textSecondary: isDarkMode ? '#94A3B8' : '#64748B',
+    border: isDarkMode ? '#1F2937' : '#CBD5E1',
+    green: '#22C55E',
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#05090C]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32 }}
       >
+        {/* Back Button */}
         <TouchableOpacity
           onPress={() => router.back()}
-          className="mt-4 h-10 w-10 items-center justify-center rounded-full bg-[#11181C]"
+          style={{
+            marginTop: 16,
+            height: 40,
+            width: 40,
+            borderRadius: 20,
+            backgroundColor: colors.card,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
         >
-          <Feather name="arrow-left" size={18} color="#F8FAFC" />
+          <Feather name="arrow-left" size={18} color={colors.textPrimary} />
         </TouchableOpacity>
 
-        <Text className="mt-6 text-2xl font-JakartaBold text-white">
+        {/* Title */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontSize: 24,
+            fontWeight: '700',
+            color: colors.textPrimary,
+          }}
+        >
           Order Details
         </Text>
 
-        <View className="mt-6 rounded-3xl border border-[#1F2937] bg-[#0F1418] p-5">
-          <View className="flex-row items-center justify-between">
-            <Text className="text-lg font-JakartaBold text-white">
+        {/* Order Card */}
+        <View
+          style={{
+            marginTop: 24,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            padding: 20,
+          }}
+        >
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18, fontWeight: '700', color: colors.textPrimary }}>
               Order ID {order.id}
             </Text>
-            <View className="rounded-full bg-[#134E32] px-3 py-1">
-              <Text className="text-xs font-JakartaSemiBold text-[#A7F3D0]">
+            <View
+              style={{
+                borderRadius: 20,
+                backgroundColor: colors.green + '33', // شفاف قليلا
+                paddingHorizontal: 8,
+                paddingVertical: 2,
+              }}
+            >
+              <Text style={{ color: colors.green, fontSize: 12, fontWeight: '600' }}>
                 {order.status === 'available' ? 'Available' : order.status}
               </Text>
             </View>
           </View>
-          <Text className="mt-1 text-xs font-JakartaMedium text-[#94A3B8]">
+          <Text style={{ marginTop: 4, fontSize: 12, color: colors.textSecondary }}>
             Created {order.createdAt}
           </Text>
 
-          <View className="mt-5">
-            <Text className="text-sm font-JakartaSemiBold text-white">Route</Text>
-            <View className="mt-3 rounded-2xl border border-[#1F2937] bg-[#11181C] p-4">
-              <View className="flex-row items-start">
-                <Feather name="map-pin" size={16} color="#22C55E" />
-                <View className="ml-3 flex-1">
-                  <Text className="text-sm font-JakartaSemiBold text-white">
+          {/* Route */}
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>Route</Text>
+            <View
+              style={{
+                marginTop: 12,
+                borderRadius: 16,
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: colors.card,
+                padding: 16,
+              }}
+            >
+              {/* Pickup */}
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <Feather name="map-pin" size={16} color={colors.green} />
+                <View style={{ marginLeft: 12, flex: 1 }}>
+                  <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>
                     Pickup
                   </Text>
-                  <Text className="mt-1 text-xs font-JakartaMedium text-[#94A3B8]">
+                  <Text style={{ marginTop: 4, fontSize: 12, color: colors.textSecondary }}>
                     {order.pickup}
                   </Text>
                 </View>
               </View>
 
-              <View className="mt-4 flex-row items-start">
+              {/* Drop-off */}
+              <View style={{ marginTop: 16, flexDirection: 'row', alignItems: 'flex-start' }}>
                 <Feather name="navigation" size={16} color="#38BDF8" />
-                <View className="ml-3 flex-1">
-                  <Text className="text-sm font-JakartaSemiBold text-white">
+                <View style={{ marginLeft: 12, flex: 1 }}>
+                  <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>
                     Drop-off
                   </Text>
-                  <Text className="mt-1 text-xs font-JakartaMedium text-[#94A3B8]">
+                  <Text style={{ marginTop: 4, fontSize: 12, color: colors.textSecondary }}>
                     {order.dropoff}
                   </Text>
                 </View>
               </View>
 
-              <View className="mt-4 flex-row items-center justify-between">
-                <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                  {order.distance}
-                </Text>
-                <TouchableOpacity className="flex-row items-center">
-                  <Feather name="map" size={16} color="#22C55E" />
-                  <Text className="ml-2 text-xs font-JakartaSemiBold text-[#22C55E]">
+              {/* Distance & Map */}
+              <View style={{ marginTop: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontSize: 12, color: colors.textSecondary }}>{order.distance}</Text>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Feather name="map" size={16} color={colors.green} />
+                  <Text style={{ marginLeft: 8, fontSize: 12, fontWeight: '600', color: colors.green }}>
                     Map
                   </Text>
                 </TouchableOpacity>
@@ -84,77 +141,99 @@ const OrderDetailsScreen = () => {
             </View>
           </View>
 
-          <View className="mt-5">
-            <Text className="text-sm font-JakartaSemiBold text-white">
-              Customer Details
-            </Text>
-            <View className="mt-3 flex-row items-center justify-between rounded-2xl border border-[#1F2937] bg-[#11181C] p-4">
+          {/* Customer Details */}
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>Customer Details</Text>
+            <View
+              style={{
+                marginTop: 12,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderRadius: 16,
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: colors.card,
+                padding: 16,
+              }}
+            >
               <View>
-                <Text className="text-sm font-JakartaSemiBold text-white">
+                <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>
                   {order.customer.name}
                 </Text>
-                <Text className="mt-1 text-xs font-JakartaMedium text-[#94A3B8]">
+                <Text style={{ marginTop: 4, fontSize: 12, color: colors.textSecondary }}>
                   {order.customer.phone}
                 </Text>
               </View>
-              <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-[#134E32]">
-                <Feather name="phone" size={18} color="#22C55E" />
+              <TouchableOpacity
+                style={{
+                  height: 40,
+                  width: 40,
+                  borderRadius: 20,
+                  backgroundColor: colors.green + '33',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Feather name="phone" size={18} color={colors.green} />
               </TouchableOpacity>
             </View>
           </View>
 
-          <View className="mt-5 rounded-2xl border border-[#1F2937] bg-[#11181C] p-4">
-            <Text className="text-sm font-JakartaSemiBold text-white">
-              Payment Details
-            </Text>
+          {/* Payment Details */}
+          <View
+            style={{
+              marginTop: 20,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              padding: 16,
+            }}
+          >
+            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>Payment Details</Text>
 
-            <View className="mt-4 flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Delivery Fee
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-white">
-                {order.fee} YER
-              </Text>
+            <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ fontSize: 12, color: colors.textSecondary }}>Delivery Fee</Text>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>{order.fee} YER</Text>
             </View>
-            <View className="mt-2 flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Reward Bonus
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-[#22C55E]">
-                +{order.bonus} YER
-              </Text>
+
+            <View style={{ marginTop: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ fontSize: 12, color: colors.textSecondary }}>Reward Bonus</Text>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: colors.green }}>+{order.bonus} YER</Text>
             </View>
-            <View className="mt-3 h-[1px] w-full bg-[#1F2937]" />
-            <View className="mt-3 flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaSemiBold text-white">
-                Total Earnings
-              </Text>
-              <Text className="text-sm font-JakartaBold text-[#22C55E]">
-                {order.total} YER
-              </Text>
-            </View>
-            <View className="mt-3 flex-row items-center">
-              <Feather name="dollar-sign" size={16} color="#22C55E" />
-              <Text className="ml-2 text-xs font-JakartaMedium text-[#94A3B8]">
-                {order.paymentMethod}
-              </Text>
+
+            <View style={{ marginTop: 12, height: 1, width: '100%', backgroundColor: colors.border }} />
+
+            <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textPrimary }}>Total Earnings</Text>
+              <Text style={{ fontSize: 14, fontWeight: '700', color: colors.green }}>{order.total} YER</Text>
             </View>
           </View>
 
-          <View className="mt-5 rounded-2xl border border-[#1F2937] bg-[#11181C] p-4">
-            <Text className="text-sm font-JakartaSemiBold text-white">
-              Additional Info
-            </Text>
-            <Text className="mt-2 text-xs font-JakartaMedium text-[#94A3B8]">
+          {/* Additional Info */}
+          <View
+            style={{
+              marginTop: 20,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              padding: 16,
+            }}
+          >
+            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.textPrimary }}>Additional Info</Text>
+            <Text style={{ marginTop: 8, fontSize: 12, color: colors.textSecondary }}>
               {order.additionalInfo}
             </Text>
           </View>
         </View>
 
-        <Text className="mt-6 text-xs font-JakartaMedium text-[#94A3B8]">
+        <Text style={{ marginTop: 16, fontSize: 12, color: colors.textSecondary }}>
           Once accepted, the order will move to your Active Deliveries list.
         </Text>
 
+        {/* Buttons */}
         <DriverButton
           title="Accept Order"
           className="mt-6 h-14"
@@ -173,7 +252,11 @@ const OrderDetailsScreen = () => {
           onPress={() => router.push('/(driver)/(tabs)/orders')}
         />
 
-        <FooterControls />
+        {/* Footer & Theme Toggle */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

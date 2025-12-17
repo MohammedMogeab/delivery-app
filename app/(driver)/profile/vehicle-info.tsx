@@ -18,51 +18,124 @@ import { FooterControls } from '@/components/driver/FooterControls';
 const VehicleInfoScreen = () => {
   const [vehicleType, setVehicleType] = useState(driverVehicleTypes[0]);
   const [showPicker, setShowPicker] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const colors = {
+    background: isDarkMode ? '#05090C' : '#F8FAFC',
+    card: isDarkMode ? '#0F1418' : '#FFFFFF',
+    textPrimary: isDarkMode ? '#F8FAFC' : '#0F172A',
+    textSecondary: isDarkMode ? '#94A3B8' : '#64748B',
+    border: isDarkMode ? '#1F2937' : '#CBD5E1',
+    green: '#22C55E',
+  };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#05090C]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32 }}
       >
+        {/* Header */}
         <TouchableOpacity
           onPress={() => router.back()}
-          className="mt-4 h-10 w-10 items-center justify-center rounded-full bg-[#11181C]"
+          style={{
+            marginTop: 16,
+            height: 40,
+            width: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 20,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}
         >
-          <Feather name="arrow-left" size={18} color="#F8FAFC" />
+          <Feather name="arrow-left" size={18} color={colors.textPrimary} />
         </TouchableOpacity>
 
-        <Text className="mt-6 text-2xl font-JakartaBold text-white">
+        {/* Title */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontSize: 24,
+            fontWeight: '700',
+            color: colors.textPrimary,
+          }}
+        >
           Vehicle Information
         </Text>
 
-        <View className="mt-6 items-center">
-          <View className="h-20 w-20 items-center justify-center rounded-full bg-[#11181C]">
-            <Feather name="truck" size={30} color="#22C55E" />
+        {/* Vehicle Icon */}
+        <View style={{ marginTop: 24, alignItems: 'center' }}>
+          <View
+            style={{
+              height: 80,
+              width: 80,
+              borderRadius: 40,
+              backgroundColor: colors.card,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Feather name="truck" size={30} color={colors.green} />
           </View>
         </View>
 
-        <View className="mt-8" style={{ gap: 16 }}>
+        {/* Vehicle Type Picker */}
+        <View style={{ marginTop: 32, gap: 16 }}>
           <TouchableOpacity
             onPress={() => setShowPicker((prev) => !prev)}
-            className="rounded-2xl border border-[#1F2937] bg-[#0F1418] p-4"
+            style={{
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              padding: 16,
+            }}
           >
-            <View className="flex-row items-center justify-between">
-              <View className="flex-row items-center">
-                <Feather name="truck" size={18} color="#22C55E" />
-                <Text className="ml-3 text-sm font-JakartaSemiBold text-white">
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Feather name="truck" size={18} color={colors.green} />
+                <Text
+                  style={{
+                    marginLeft: 12,
+                    fontSize: 14,
+                    fontWeight: '600',
+                    color: colors.textPrimary,
+                  }}
+                >
                   Vehicle Type
                 </Text>
               </View>
-              <Feather name="chevron-down" size={18} color="#94A3B8" />
+              <Feather name="chevron-down" size={18} color={colors.textSecondary} />
             </View>
-            <Text className="mt-3 text-base font-JakartaMedium text-[#94A3B8]">
+            <Text
+              style={{
+                marginTop: 12,
+                fontSize: 16,
+                fontWeight: '500',
+                color: colors.textSecondary,
+              }}
+            >
               {vehicleType}
             </Text>
           </TouchableOpacity>
 
-          {showPicker ? (
-            <View className="rounded-2xl border border-[#1F2937] bg-[#0F1418]">
+          {showPicker && (
+            <View
+              style={{
+                borderRadius: 16,
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: colors.card,
+              }}
+            >
               {driverVehicleTypes.map((type) => (
                 <TouchableOpacity
                   key={type}
@@ -70,80 +143,170 @@ const VehicleInfoScreen = () => {
                     setVehicleType(type);
                     setShowPicker(false);
                   }}
-                  className="border-b border-[#1F2937] px-4 py-3"
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderBottomWidth: type === driverVehicleTypes[driverVehicleTypes.length - 1] ? 0 : 1,
+                    borderBottomColor: colors.border,
+                  }}
                 >
                   <Text
-                    className="text-sm font-JakartaSemiBold"
-                    style={{ color: type === vehicleType ? '#22C55E' : '#F8FAFC' }}
+                    style={{
+                      fontSize: 14,
+                      fontWeight: '600',
+                      color: type === vehicleType ? colors.green : colors.textPrimary,
+                    }}
                   >
                     {type}
                   </Text>
                 </TouchableOpacity>
               ))}
             </View>
-          ) : null}
+          )}
 
+          {/* Inputs */}
           <DriverInput
             label="Plate Number"
             placeholder="e.g., 24A-345"
             icon="hash"
-            variant="dark"
+            variant={isDarkMode ? 'dark' : 'light'}
           />
           <DriverInput
             label="Load Capacity (kg)"
             placeholder="500"
             icon="archive"
-            variant="dark"
+            variant={isDarkMode ? 'dark' : 'light'}
             keyboardType="numeric"
           />
           <DriverInput
             label="Color"
             placeholder="White"
             icon="droplet"
-            variant="dark"
+            variant={isDarkMode ? 'dark' : 'light'}
           />
 
-          <View className="rounded-3xl border border-dashed border-[#1F2937] bg-[#0F1418] p-6">
-            <View className="items-center justify-center rounded-2xl bg-[#11181C] p-4">
+          {/* Vehicle Image Upload */}
+          <View
+            style={{
+              borderRadius: 24,
+              borderWidth: 1,
+              borderStyle: 'dashed',
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              padding: 24,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: colors.card,
+                borderRadius: 16,
+                padding: 16,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <Image
                 source={{
                   uri: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=400&q=60',
                 }}
-                className="h-32 w-full rounded-2xl"
+                style={{ width: '100%', height: 128, borderRadius: 16 }}
               />
             </View>
-            <TouchableOpacity className="mt-4 items-center justify-center rounded-2xl border border-[#1F2937] bg-[#11181C] py-3">
-              <Text className="text-sm font-JakartaSemiBold text-white">
+            <TouchableOpacity
+              style={{
+                marginTop: 16,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 16,
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: colors.card,
+                paddingVertical: 12,
+              }}
+            >
+              <Text style={{ color: colors.textPrimary, fontWeight: '600' }}>
                 Click to upload
               </Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity className="rounded-3xl border border-dashed border-[#1F2937] bg-[#0F1418] p-6">
-            <View className="flex-row items-center justify-center">
-              <Feather name="upload" size={20} color="#22C55E" />
-              <Text className="ml-3 text-sm font-JakartaSemiBold text-white">
+          {/* Registration Document */}
+          <TouchableOpacity
+            style={{
+              marginTop: 16,
+              borderRadius: 24,
+              borderWidth: 1,
+              borderStyle: 'dashed',
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              padding: 24,
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Feather name="upload" size={20} color={colors.green} />
+              <Text
+                style={{
+                  marginLeft: 12,
+                  fontSize: 14,
+                  fontWeight: '600',
+                  color: colors.textPrimary,
+                }}
+              >
                 Upload Registration Document
               </Text>
             </View>
-            <Text className="mt-2 text-xs font-JakartaMedium text-[#94A3B8] text-center">
+            <Text
+              style={{
+                marginTop: 8,
+                fontSize: 12,
+                color: colors.textSecondary,
+                textAlign: 'center',
+              }}
+            >
               PDF, JPG, PNG
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="mt-6 rounded-3xl border border-[#1F2937] bg-[#0F1418] p-4">
-          <View className="flex-row items-start">
-            <View className="mt-1 h-8 w-8 items-center justify-center rounded-full bg-[#11181C]">
-              <Feather name="shield" size={16} color="#22C55E" />
-            </View>
-            <Text className="ml-3 flex-1 text-xs font-JakartaMedium text-[#94A3B8]">
-              Vehicle information helps customers identify your vehicle and is required for
-              admin verification to ensure safety and compliance.
-            </Text>
+        {/* Info Box */}
+        <View
+          style={{
+            marginTop: 24,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            padding: 16,
+            flexDirection: 'row',
+          }}
+        >
+          <View
+            style={{
+              height: 32,
+              width: 32,
+              borderRadius: 16,
+              backgroundColor: colors.background,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Feather name="shield" size={16} color={colors.green} />
           </View>
+          <Text
+            style={{
+              marginLeft: 12,
+              flex: 1,
+              fontSize: 12,
+              color: colors.textSecondary,
+            }}
+          >
+            Vehicle information helps customers identify your vehicle and is required for
+            admin verification to ensure safety and compliance.
+          </Text>
         </View>
 
+        {/* Buttons */}
         <DriverButton title="Save Vehicle Info" className="mt-6 h-14" />
         <DriverButton
           title="Cancel"
@@ -153,7 +316,11 @@ const VehicleInfoScreen = () => {
           onPress={() => router.back()}
         />
 
-        <FooterControls />
+        {/* Footer */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

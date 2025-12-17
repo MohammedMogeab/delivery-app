@@ -55,7 +55,7 @@ export default function RewardDetails() {
           <View className="mt-4">
             <DriverButton
               title="Back to Rewards"
-              onPress={() => router.push('/(driver)/reward/reward')}
+              //onPress={() => router.push('/(driver)/reward/reward')}
               variant="outline"
             />
           </View>

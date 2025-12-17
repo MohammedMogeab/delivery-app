@@ -156,7 +156,7 @@ const ActiveDelivery2 = () => {
                 {/* زر "Mark as Arrived" */}
                 <DriverButton
                     title="Mark as Arrived"
-                    onPress={() => router.replace('/(driver)/activities/ActiveDelivery')}
+                    onPress={() => router.replace('/(driver)/delivery/report_deliveryIssue')}
                     className="mt-4 "
                  />
 

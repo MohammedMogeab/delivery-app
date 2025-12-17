@@ -10,114 +10,114 @@ import { FooterControls } from '@/components/driver/FooterControls';
 
 const OrderConfirmationScreen = () => {
   const [available, setAvailable] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
   const { id } = useLocalSearchParams<{ id?: string }>();
   const order = driverOrders.find((item) => item.id === id) ?? driverOrders[0];
 
+  const colors = {
+    background: isDarkMode ? '#05090C' : '#F8FAFC',
+    card: isDarkMode ? '#11181C' : '#FFFFFF',
+    textPrimary: isDarkMode ? '#FFFFFF' : '#0F172A',
+    textSecondary: isDarkMode ? '#94A3B8' : '#64748B',
+    border: isDarkMode ? '#1F2937' : '#CBD5E1',
+    green: '#22C55E',
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#05090C]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32 }}
       >
-        <View className="mt-4 flex-row items-center justify-between">
+        {/* Header */}
+        <View style={{ marginTop: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <TouchableOpacity
             onPress={() => router.back()}
-            className="h-10 w-10 items-center justify-center rounded-full bg-[#11181C]"
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              backgroundColor: colors.card,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <Feather name="x" size={18} color="#F8FAFC" />
+            <Feather name="x" size={18} color={colors.textPrimary} />
           </TouchableOpacity>
-          <Text className="text-lg font-JakartaSemiBold text-white">
+          <Text style={{ fontSize: 18, fontWeight: '600', color: colors.textPrimary }}>
             Confirm Acceptance
           </Text>
-          <View className="h-10 w-10" />
+          <View style={{ height: 40, width: 40 }} />
         </View>
 
-        <View className="mt-6 rounded-3xl border border-[#1F2937] bg-[#0F1418] p-5">
-          <Text className="text-sm font-JakartaMedium text-[#94A3B8]">
-            Order Summary
-          </Text>
+        {/* Order Summary Card */}
+        <View
+          style={{
+            marginTop: 24,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            padding: 20,
+          }}
+        >
+          <Text style={{ fontSize: 12, color: colors.textSecondary }}>Order Summary</Text>
 
-          <View className="mt-4" style={{ gap: 16 }}>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Order ID
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-white">
-                {order.id}
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Pickup
-              </Text>
-              <Text className="flex-1 text-right text-sm font-JakartaSemiBold text-white">
-                {order.pickup}
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Drop-off
-              </Text>
-              <Text className="flex-1 text-right text-sm font-JakartaSemiBold text-white">
-                {order.dropoff}
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Distance
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-white">
-                {order.distance.split('—')[0].trim()}
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Delivery Fee
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-white">
-                {order.fee} YER
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
-                Reward
-              </Text>
-              <Text className="text-sm font-JakartaSemiBold text-[#22C55E]">
-                +{order.bonus} YER
-              </Text>
-            </View>
-            <View className="h-[1px] w-full bg-[#1F2937]" />
-            <View className="flex-row items-center justify-between">
-              <Text className="text-xs font-JakartaSemiBold text-white">
-                Estimated Total
-              </Text>
-              <Text className="text-lg font-JakartaBold text-[#22C55E]">
-                {order.total} YER
-              </Text>
+          <View style={{ marginTop: 16, gap: 16 }}>
+            {[
+              { label: 'Order ID', value: order.id, color: colors.textPrimary },
+              { label: 'Pickup', value: order.pickup, color: colors.textPrimary },
+              { label: 'Drop-off', value: order.dropoff, color: colors.textPrimary },
+              { label: 'Distance', value: order.distance.split('—')[0].trim(), color: colors.textPrimary },
+              { label: 'Delivery Fee', value: `${order.fee} YER`, color: colors.textPrimary },
+              { label: 'Reward', value: `+${order.bonus} YER`, color: colors.green },
+            ].map((item, index) => (
+              <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontSize: 12, color: colors.textSecondary }}>{item.label}</Text>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: item.color }}>{item.value}</Text>
+              </View>
+            ))}
+
+            <View style={{ height: 1, width: '100%', backgroundColor: colors.border, marginVertical: 12 }} />
+
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ fontSize: 12, fontWeight: '600', color: colors.textPrimary }}>Estimated Total</Text>
+              <Text style={{ fontSize: 18, fontWeight: '700', color: colors.green }}>{order.total} YER</Text>
             </View>
           </View>
 
-          <Text className="mt-5 text-xs font-JakartaMedium text-[#94A3B8]">
-            Once you accept, this order will be assigned to you. Cancellation is only
-            allowed before pickup.
+          <Text style={{ marginTop: 16, fontSize: 12, color: colors.textSecondary }}>
+            Once you accept, this order will be assigned to you. Cancellation is only allowed before pickup.
           </Text>
 
+          {/* Availability Checkbox */}
           <TouchableOpacity
             onPress={() => setAvailable((prev) => !prev)}
-            className="mt-5 flex-row items-center"
+            style={{ marginTop: 16, flexDirection: 'row', alignItems: 'center' }}
           >
             <View
-              className="mr-3 h-5 w-5 items-center justify-center rounded-md border border-[#22C55E]"
-              style={{ backgroundColor: available ? '#22C55E' : 'transparent' }}
+              style={{
+                marginRight: 12,
+                height: 20,
+                width: 20,
+                borderRadius: 4,
+                borderWidth: 1,
+                borderColor: colors.green,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: available ? colors.green : 'transparent',
+              }}
             >
-              {available ? <Feather name="check" size={14} color="#0F172A" /> : null}
+              {available && <Feather name="check" size={14} color={isDarkMode ? '#0F172A' : '#FFFFFF'} />}
             </View>
-            <Text className="text-xs font-JakartaMedium text-[#94A3B8]">
+            <Text style={{ fontSize: 12, color: colors.textSecondary }}>
               I am available to complete this delivery.
             </Text>
           </TouchableOpacity>
         </View>
 
+        {/* Action Buttons */}
         <DriverButton
           title="Confirm & Accept Order"
           onPress={() => router.replace('/(driver)/activities/PickupConfirmationScreen')}
@@ -132,7 +132,11 @@ const OrderConfirmationScreen = () => {
           onPress={() => router.back()}
         />
 
-        <FooterControls />
+        {/* Footer with Theme Toggle */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

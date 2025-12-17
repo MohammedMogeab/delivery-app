@@ -17,93 +17,222 @@ import { FooterControls } from '@/components/driver/FooterControls';
 
 const ServiceAreaScreen = () => {
   const [selectedArea, setSelectedArea] = useState(driverServiceAreas[0]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const colors = {
+    background: isDarkMode ? '#05090C' : '#F8FAFC',
+    card: isDarkMode ? '#0F1418' : '#FFFFFF',
+    textPrimary: isDarkMode ? '#F8FAFC' : '#0F172A',
+    textSecondary: isDarkMode ? '#94A3B8' : '#64748B',
+    border: isDarkMode ? '#1F2937' : '#CBD5E1',
+    green: '#22C55E',
+    greenBg: '#134E32',
+  };
 
   return (
-    <SafeAreaView className="flex-1 bg-[#05090C]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32 }}
       >
+        {/* Header */}
         <TouchableOpacity
           onPress={() => router.back()}
-          className="mt-4 h-10 w-10 items-center justify-center rounded-full bg-[#11181C]"
+          style={{
+            marginTop: 16,
+            height: 40,
+            width: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 20,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}
         >
-          <Feather name="arrow-left" size={18} color="#F8FAFC" />
+          <Feather name="arrow-left" size={18} color={colors.textPrimary} />
         </TouchableOpacity>
 
-        <Text className="mt-6 text-2xl font-JakartaBold text-white">
+        {/* Title & Subtitle */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontSize: 24,
+            fontWeight: '700',
+            color: colors.textPrimary,
+          }}
+        >
           Select Service Area
         </Text>
-        <Text className="mt-2 text-sm font-JakartaMedium text-[#94A3B8]">
+        <Text
+          style={{
+            marginTop: 8,
+            fontSize: 14,
+            color: colors.textSecondary,
+          }}
+        >
           Choose the area or city where you want to receive delivery requests.
         </Text>
 
-        <View className="mt-6 overflow-hidden rounded-3xl border border-[#1F2937] bg-[#0F1418]">
+        {/* Map & Location Buttons */}
+        <View
+          style={{
+            marginTop: 24,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            overflow: 'hidden',
+            position: 'relative',
+          }}
+        >
           <Image
             source={{
               uri: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60',
             }}
-            className="h-48 w-full"
+            style={{ height: 192, width: '100%' }}
           />
-          <View className="absolute right-4 top-4 flex-row">
-            <TouchableOpacity className="mr-3 h-10 w-10 items-center justify-center rounded-full bg-[#11181C]">
-              <Feather name="plus" size={18} color="#F8FAFC" />
+          <View
+            style={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              flexDirection: 'row',
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                marginRight: 12,
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+                backgroundColor: colors.card,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Feather name="plus" size={18} color={colors.textPrimary} />
             </TouchableOpacity>
-            <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-[#11181C]">
-              <Feather name="minus" size={18} color="#F8FAFC" />
+            <TouchableOpacity
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+                backgroundColor: colors.card,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Feather name="minus" size={18} color={colors.textPrimary} />
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity className="mx-4 mb-4 mt-4 flex-row items-center justify-center rounded-2xl bg-[#22C55E] py-3">
-            <Feather name="navigation" size={16} color="#0F172A" />
-            <Text className="ml-2 text-sm font-JakartaSemiBold text-[#0F172A]">
+          <TouchableOpacity
+            style={{
+              marginHorizontal: 16,
+              marginTop: 16,
+              marginBottom: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 16,
+              backgroundColor: colors.green,
+              paddingVertical: 12,
+            }}
+          >
+            <Feather name="navigation" size={16} color={colors.textPrimary} />
+            <Text
+              style={{
+                marginLeft: 8,
+                fontSize: 14,
+                fontWeight: '600',
+                color: colors.textPrimary === '#F8FAFC' ? '#0F172A' : '#FFFFFF',
+              }}
+            >
               Use My Current Location
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="mt-6">
+        {/* Search */}
+        <View style={{ marginTop: 24 }}>
           <DriverInput
             placeholder="Search city or area"
             icon="search"
-            variant="dark"
+            variant={isDarkMode ? 'dark' : 'light'}
           />
         </View>
 
-        <Text className="mt-6 text-sm font-JakartaSemiBold text-[#94A3B8]">
+        {/* Suggested Areas */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontSize: 14,
+            fontWeight: '600',
+            color: colors.textSecondary,
+          }}
+        >
           Suggested Areas
         </Text>
-        <View className="mt-3 rounded-3xl border border-[#1F2937] bg-[#0F1418]">
+        <View
+          style={{
+            marginTop: 12,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            overflow: 'hidden',
+          }}
+        >
           {driverServiceAreas.map((area, index) => {
             const active = area === selectedArea;
             return (
               <TouchableOpacity
                 key={area}
                 onPress={() => setSelectedArea(area)}
-                className="flex-row items-center justify-between px-4 py-4"
                 style={{
-                  borderBottomWidth: index === driverServiceAreas.length - 1 ? 0 : 1,
-                  borderBottomColor: '#1F2937',
-                  backgroundColor: active ? '#11181C' : 'transparent',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingHorizontal: 16,
+                  paddingVertical: 16,
+                  borderBottomWidth:
+                    index === driverServiceAreas.length - 1 ? 0 : 1,
+                  borderBottomColor: colors.border,
+                  backgroundColor: active ? colors.card : 'transparent',
                 }}
               >
                 <Text
-                  className="text-sm font-JakartaSemiBold"
-                  style={{ color: active ? '#22C55E' : '#F8FAFC' }}
+                  style={{
+                    fontSize: 14,
+                    fontWeight: '600',
+                    color: active ? colors.green : colors.textPrimary,
+                  }}
                 >
                   {area}
                 </Text>
                 <View
-                  className="h-5 w-5 items-center justify-center rounded-full border border-[#22C55E]"
-                  style={{ backgroundColor: active ? '#22C55E' : 'transparent' }}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    borderColor: colors.green,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: active ? colors.green : 'transparent',
+                  }}
                 >
-                  {active ? <Feather name="check" size={12} color="#0F172A" /> : null}
+                  {active ? (
+                    <Feather name="check" size={12} color={colors.card} />
+                  ) : null}
                 </View>
               </TouchableOpacity>
             );
           })}
         </View>
 
+        {/* Buttons */}
         <DriverButton
           title="Save Area"
           className="mt-6 h-14"
@@ -117,11 +246,22 @@ const ServiceAreaScreen = () => {
           onPress={() => router.back()}
         />
 
-        <Text className="mt-4 text-center text-xs font-JakartaMedium text-[#64748B]">
+        <Text
+          style={{
+            marginTop: 16,
+            textAlign: 'center',
+            fontSize: 12,
+            color: colors.textSecondary,
+          }}
+        >
           You can change your delivery area anytime from Profile.
         </Text>
 
-        <FooterControls />
+        {/* Footer */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

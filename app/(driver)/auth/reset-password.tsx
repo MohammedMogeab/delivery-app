@@ -11,8 +11,15 @@ import { router } from 'expo-router';
 import { DriverButton } from '@/components/driver/DriverButton';
 import { DriverInput } from '@/components/driver/DriverInput';
 import { FooterControls } from '@/components/driver/FooterControls';
+import { useState } from 'react';
 
 const ResetPasswordScreen = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+    const colors = {
+      background: isDarkMode ? '#0D0D0D' : '#F8FAFC',
+      card: isDarkMode ? '#141414' : '#FFFFFF',
+      text: isDarkMode ? '#FFFFFF' : '#0F172A',
+    };
   return (
     <SafeAreaView className="flex-1 bg-[#05090C]">
       <ScrollView
@@ -76,7 +83,10 @@ const ResetPasswordScreen = () => {
           </Text>
         </TouchableOpacity>
 
-        <FooterControls />
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(prev => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

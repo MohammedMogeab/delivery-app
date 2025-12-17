@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
@@ -9,66 +10,145 @@ import { DriverButton } from '@/components/driver/DriverButton';
 import { FooterControls } from '@/components/driver/FooterControls';
 
 const DocumentUploadScreen = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const colors = {
+    background: isDarkMode ? '#05090C' : '#F8FAFC',
+    card: isDarkMode ? '#0F1418' : '#FFFFFF',
+    textPrimary: isDarkMode ? '#F8FAFC' : '#0F172A',
+    textSecondary: isDarkMode ? '#94A3B8' : '#64748B',
+    border: isDarkMode ? '#1F2937' : '#CBD5E1',
+    green: '#22C55E',
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#05090C]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingBottom: 32,
-        }}
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 32 }}
       >
+        {/* Header */}
         <TouchableOpacity
           onPress={() => router.back()}
-          className="mt-4 h-10 w-10 items-center justify-center rounded-full bg-[#11181C]"
+          style={{
+            marginTop: 16,
+            height: 40,
+            width: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 20,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+          }}
         >
-          <Feather name="arrow-left" size={18} color="#F8FAFC" />
+          <Feather name="arrow-left" size={18} color={colors.textPrimary} />
         </TouchableOpacity>
 
-        <Text className="mt-6 text-2xl font-JakartaBold text-[#F8FAFC]">
+        {/* Title */}
+        <Text
+          style={{
+            marginTop: 24,
+            fontSize: 24,
+            fontWeight: '700',
+            color: colors.textPrimary,
+          }}
+        >
           Upload Documents
         </Text>
-        <Text className="mt-3 text-sm font-JakartaMedium text-[#94A3B8]">
+        <Text
+          style={{
+            marginTop: 8,
+            fontSize: 14,
+            color: colors.textSecondary,
+          }}
+        >
           Please upload clear, un-cropped images of the following documents. Ensure
           all four corners are visible and the text is readable.
         </Text>
 
-        <View className="mt-8">
+        {/* Document Cards */}
+        <View style={{ marginTop: 24 }}>
           {driverDocumentRequirements.map((doc) => (
             <DocumentCard key={doc.id} item={doc} />
           ))}
         </View>
 
-        <View className="mt-4 rounded-3xl border border-[#1F2937] bg-[#0F1418] p-4">
-          <View className="flex-row items-start">
-            <View className="mt-1 h-9 w-9 items-center justify-center rounded-full bg-[#11181C]">
-              <Feather name="info" size={18} color="#22C55E" />
-            </View>
-            <Text className="ml-3 flex-1 text-sm font-JakartaMedium text-[#94A3B8]">
-              {"Your documents will be reviewed within 24-48 hours. We'll notify you once your account is active."}
-            </Text>
+        {/* Info Box */}
+        <View
+          style={{
+            marginTop: 16,
+            borderRadius: 24,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card,
+            padding: 16,
+            flexDirection: 'row',
+          }}
+        >
+          <View
+            style={{
+              height: 36,
+              width: 36,
+              borderRadius: 18,
+              backgroundColor: colors.background,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Feather name="info" size={18} color={colors.green} />
           </View>
+          <Text
+            style={{
+              marginLeft: 12,
+              flex: 1,
+              fontSize: 12,
+              color: colors.textSecondary,
+            }}
+          >
+            Your documents will be reviewed within 24-48 hours. We'll notify you once
+            your account is active.
+          </Text>
         </View>
 
+        {/* Buttons */}
         <DriverButton
           title="Submit for Review"
           onPress={() => router.push('/(driver)/auth/verification-status')}
           className="mt-6 h-14"
         />
 
-        <TouchableOpacity className="mt-4 items-center">
-          <Text className="text-sm font-JakartaSemiBold text-[#94A3B8]">
+        <TouchableOpacity
+          style={{ marginTop: 16, alignItems: 'center' }}
+          onPress={() => router.back()}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: colors.textSecondary,
+            }}
+          >
             Skip for now
           </Text>
         </TouchableOpacity>
 
-        <View className="mt-8 items-center">
-          <Text className="text-xs font-JakartaMedium text-[#64748B]">
+        <View style={{ marginTop: 32, alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: 12,
+              color: colors.textSecondary,
+            }}
+          >
             Step 2 of 3
           </Text>
         </View>
 
-        <FooterControls />
+        {/* Footer */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode((prev) => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );

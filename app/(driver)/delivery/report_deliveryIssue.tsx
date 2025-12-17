@@ -1,151 +1,282 @@
 import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
-  SafeAreaView,
-  ScrollView,
-  View,
+  StyleSheet,
   Text,
+  View,
+  ScrollView,
   TouchableOpacity,
   TextInput,
+  StatusBar,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { ChevronLeft, Camera, Upload, Info } from 'lucide-react-native';
 
-import DriverButton from '@/components/driver/DriverButton';
-
-const ReasonItem = ({
-  label,
-  selected,
-  onPress,
-}: {
-  label: string;
-  selected: boolean;
-  onPress: () => void;
-}) => (
-  <TouchableOpacity
-    onPress={onPress}
-    activeOpacity={0.85}
-    className={`flex-row items-center justify-between rounded-2xl px-4 py-4 mb-3 ${
-      selected ? 'border border-[#0F766E] bg-[#052F26]/20' : 'border border-[#334155]'
-    }`}
-  >
-    <View className="flex-row items-center">
-      <View className={`w-5 h-5 mr-3 rounded-full ${selected ? 'bg-[#10B981]' : 'bg-transparent border border-[#64748B]'}`} />
-      <Text className="text-white">{label}</Text>
-    </View>
-  </TouchableOpacity>
-);
+import { DriverButton } from '@/components/driver/DriverButton';
+import FooterControls from '@/components/driver/FooterControls';
 
 export default function ReportDeliveryIssue() {
-  const [selectedReason, setSelectedReason] = useState<string | null>(null);
-  const [otherText, setOtherText] = useState('');
-  const [notes, setNotes] = useState('');
+  const [reason, setReason] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const colors = {
+    background: isDarkMode ? '#0D0D0D' : '#F8FAFC',
+    card: isDarkMode ? '#141414' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#0F172A',
+    muted: isDarkMode ? '#888' : '#64748B',
+    border: isDarkMode ? '#222' : '#E5E7EB',
+    input: isDarkMode ? '#1E1E1E' : '#F1F5F9',
+  };
 
   const reasons = [
-    'Customer unavailable',
-    'Wrong address',
-    'Damaged package',
-    'Refused delivery',
+    { id: 'unavailable', label: 'Customer unavailable' },
+    { id: 'wrong_address', label: 'Wrong address' },
+    { id: 'damaged', label: 'Damaged package' },
+    { id: 'other', label: 'Other' },
   ];
 
   return (
-    <SafeAreaView className="flex-1 bg-[#020617]">
-      <ScrollView className="px-4 py-6">
-        <View className="flex-row items-center mb-4">
-          <TouchableOpacity className="p-2 mr-3 rounded-full bg-[#0F172A]/30">
-            <Text className="text-white">←</Text>
-          </TouchableOpacity>
-          <View className="flex-1">
-            <Text className="text-white text-lg font-JakartaSemiBold">Report Delivery Issue</Text>
-          </View>
-          <View className="px-3 py-1 rounded-full bg-[#064E3B]">
-            <Text className="text-xs text-white">DLV-1043</Text>
-          </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <ChevronLeft color={colors.text} size={24} />
+        </TouchableOpacity>
+
+        <Text style={[styles.headerTitle, { color: colors.text }]}>
+          Report Delivery Issue
+        </Text>
+
+        <View style={styles.tagContainer}>
+          <Text style={styles.tagText}>DLV-1043</Text>
         </View>
+      </View>
 
-        <View className="rounded-lg bg-[#0B1220] p-4 mb-4">
-          <Text className="text-white font-JakartaSemiBold mb-3">Delivery Context</Text>
-          <View className="flex-row justify-between py-2">
-            <Text className="text-sm text-[#94A3B8]">Customer</Text>
-            <Text className="text-sm text-white">Ali Saeed</Text>
-          </View>
-          <View className="flex-row justify-between py-2">
-            <Text className="text-sm text-[#94A3B8]">Drop-off</Text>
-            <Text className="text-sm text-white">Al-Qahera, Taiz</Text>
-          </View>
-          <View className="flex-row justify-between py-2">
-            <Text className="text-sm text-[#94A3B8]">Status</Text>
-            <Text className="text-sm text-white">Delivery Attempted</Text>
-          </View>
-          <View className="flex-row justify-between py-2">
-            <Text className="text-sm text-[#94A3B8]">Distance from destination</Text>
-            <Text className="text-sm text-white">90 m</Text>
-          </View>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
 
-        <Text className="text-white font-JakartaSemiBold mb-3">Reason for Failure</Text>
+        {/* Delivery Context */}
+        <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>
+            Delivery Context
+          </Text>
 
-        <View className="mb-4">
-          {reasons.map((r) => (
-            <ReasonItem
-              key={r}
-              label={r}
-              selected={selectedReason === r}
-              onPress={() => setSelectedReason(r)}
-            />
+          {[
+            ['Customer', 'Ali Saeed'],
+            ['Drop-off', 'Al-Qahera, Taiz'],
+            ['Status', 'Delivery Attempted'],
+            ['Distance from destination', '90 m'],
+          ].map(([label, value]) => (
+            <View key={label} style={styles.infoRow}>
+              <Text style={[styles.infoLabel, { color: colors.muted }]}>
+                {label}
+              </Text>
+              <Text style={[styles.infoValue, { color: colors.text }]}>
+                {value}
+              </Text>
+            </View>
           ))}
-
-          <View className="flex-row items-center mb-3">
-            <TouchableOpacity onPress={() => setSelectedReason('Other')} className={`w-5 h-5 mr-3 rounded-full ${selectedReason === 'Other' ? 'bg-[#10B981]' : 'bg-transparent border border-[#64748B]'}`} />
-            <Text className="text-white mr-3">Other</Text>
-            <TextInput
-              value={otherText}
-              onChangeText={setOtherText}
-              placeholder="Other reason"
-              placeholderTextColor="#64748B"
-              className="flex-1 bg-[#0B1220] border border-[#334155] rounded-2xl px-3 py-2 text-white"
-            />
-          </View>
-
-          <View className="rounded-lg bg-[#052F26]/20 border border-[#064E3B] p-3 mb-4">
-            <Text className="text-sm text-[#9AE6B4]">Your report will be reviewed by the admin and store owner. The order will be marked as Failed Delivery until resolved.</Text>
-          </View>
-
-          <View className="flex-row items-center justify-between mb-3">
-            <Text className="text-white">EN</Text>
-            <Text className="text-white">/ AR</Text>
-          </View>
         </View>
 
-        <View className="rounded-lg bg-[#0B1220] p-4 mb-4">
-          <Text className="text-white font-JakartaSemiBold mb-3">Evidence (Optional)</Text>
-          <Text className="text-sm text-[#94A3B8] mb-3">Upload Photo</Text>
+        {/* Reason */}
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Reason for Failure
+        </Text>
 
-          <View className="rounded-lg border border-dashed border-[#334155] p-4 items-center mb-3">
-            <Text className="text-[#94A3B8] mb-3">Photo placeholder</Text>
-            <View className="flex-row w-full justify-center">
-              <DriverButton title="Take Photo" onPress={() => {}} variant="ghost" className="mr-3" />
-              <DriverButton title="Upload" onPress={() => {}} variant="outline" />
+        {reasons.map((item) => (
+          <TouchableOpacity
+            key={item.id}
+            onPress={() => setReason(item.id)}
+            style={[
+              styles.radioOption,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
+            <View style={[styles.radioButton, reason === item.id && styles.radioSelected]}>
+              {reason === item.id && <View style={styles.radioInner} />}
+            </View>
+            <Text style={[styles.radioLabel, { color: colors.text }]}>
+              {item.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+
+        {/* Evidence */}
+        <View style={[styles.card, { backgroundColor: colors.card }]}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>
+            Evidence <Text style={{ color: colors.muted }}>(Optional)</Text>
+          </Text>
+
+          <Text style={[styles.labelSmall, { color: colors.text }]}>
+            Upload Photo
+          </Text>
+
+          <View style={[styles.uploadBox, { borderColor: colors.border }]}>
+            <Camera color={colors.muted} size={32} />
+
+            <View style={styles.uploadButtonsRow}>
+              <TouchableOpacity style={styles.uploadBtn}>
+                <Camera color="#2ECC71" size={16} />
+                <Text style={styles.uploadBtnText}>Take Photo</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.uploadBtn}>
+                <Upload color="#2ECC71" size={16} />
+                <Text style={styles.uploadBtnText}>Upload</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
-          <Text className="text-sm text-[#94A3B8] mb-2">Notes</Text>
+          <Text style={[styles.labelSmall, { color: colors.text }]}>
+            Notes
+          </Text>
+
           <TextInput
-            value={notes}
-            onChangeText={setNotes}
+            style={[styles.noteInput, { backgroundColor: colors.input, color: colors.text }]}
             placeholder="Add additional details (optional)"
-            placeholderTextColor="#64748B"
+            placeholderTextColor={colors.muted}
             multiline
-            numberOfLines={4}
-            className="bg-[#020617] rounded-lg p-3 text-white h-28 border border-[#334155]"
           />
         </View>
 
-        <View className="mb-6">
-          <DriverButton title="Submit Report" onPress={() => {}} variant="primary" />
+        {/* Buttons */}
+        <DriverButton
+          title="Submit Report"
+          onPress={() => router.replace('/(driver)/activities/ActiveDelivery2')}
+          className="mb-3 rounded-xl "
+        />
+
+        <DriverButton
+          title="Cancel"
+          variant="secondary"
+          onPress={() => router.back()}
+          className="rounded-xl"
+        />
+
+        {/* Info */}
+        <View style={styles.infoBox}>
+          <Info color="#2ECC71" size={18} />
+          <Text style={styles.infoBoxText}>
+            Your report will be reviewed by the admin and store owner.
+          </Text>
         </View>
 
-        <View className="mb-10">
-          <DriverButton title="Cancel" onPress={() => {}} variant="outline" />
-        </View>
+        {/* Footer */}
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(prev => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+/* ---------------- STYLES ---------------- */
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flex: 1,
+    marginLeft: 10,
+  },
+
+  tagContainer: {
+    backgroundColor: '#1A2E22',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  tagText: { color: '#2ECC71', fontSize: 12, fontWeight: 'bold' },
+
+  scrollContent: { padding: 16 },
+
+  card: { borderRadius: 12, padding: 16, marginBottom: 20 },
+  cardTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 15 },
+
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
+  infoLabel: { fontSize: 14 },
+  infoValue: { fontSize: 14, fontWeight: '500' },
+
+  sectionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 12 },
+
+  radioOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+  },
+  radioButton: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#444',
+    marginRight: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioSelected: { borderColor: '#2ECC71' },
+  radioInner: { height: 10, width: 10, borderRadius: 5, backgroundColor: '#2ECC71' },
+  radioLabel: { fontSize: 14 },
+
+  labelSmall: { fontSize: 13, marginBottom: 8, marginTop: 10 },
+
+  uploadBox: {
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  uploadButtonsRow: { flexDirection: 'row', marginTop: 15, gap: 10 },
+
+  uploadBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A2E22',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+  },
+  uploadBtnText: {
+    color: '#2ECC71',
+    marginLeft: 6,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+  noteInput: {
+    borderRadius: 8,
+    padding: 12,
+    height: 80,
+    textAlignVertical: 'top',
+  },
+
+  infoBox: {
+    flexDirection: 'row',
+    backgroundColor: '#0A1A11',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#132F1F',
+    marginVertical: 20,
+  },
+  infoBoxText: {
+    color: '#2ECC71',
+    fontSize: 12,
+    marginLeft: 10,
+    flex: 1,
+  },
+});

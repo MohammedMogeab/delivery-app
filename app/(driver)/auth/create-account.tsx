@@ -16,10 +16,21 @@ import { DriverInput } from '@/components/driver/DriverInput';
 import { FooterControls } from '@/components/driver/FooterControls';
 
 const CreateAccountScreen = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [agreed, setAgreed] = useState(false);
 
+  const variant = isDarkMode ? 'dark' : 'light';
+
+  const colors = {
+    background: isDarkMode ? '#0D0D0D' : '#F8FAFC',
+    card: isDarkMode ? '#141414' : '#FFFFFF',
+    text: isDarkMode ? '#FFFFFF' : '#0F172A',
+    muted: isDarkMode ? '#94A3B8' : '#475569',
+    border: isDarkMode ? '#1F2937' : '#E2E8F0',
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-[#F4F6F6]">
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,
@@ -30,44 +41,73 @@ const CreateAccountScreen = () => {
         <View className="flex-row items-center justify-between">
           <TouchableOpacity
             onPress={() => router.back()}
-            className="mt-4 rounded-full bg-white p-3 shadow-sm"
+            style={{
+              marginTop: 16,
+              padding: 12,
+              borderRadius: 999,
+              backgroundColor: colors.card,
+            }}
           >
-            <Feather name="arrow-left" size={18} color="#0F172A" />
+            <Feather name="arrow-left" size={18} color={colors.text} />
           </TouchableOpacity>
-          <Text className="mt-4 text-lg font-JakartaSemiBold text-[#0F172A]">
+
+          <Text
+            style={{
+              marginTop: 16,
+              fontSize: 18,
+              fontWeight: '600',
+              color: colors.text,
+            }}
+          >
             Create Account
           </Text>
-          <View className="w-10" />
+
+          <View style={{ width: 40 }} />
         </View>
 
         <View className="mt-8 items-center">
           <View className="mb-5 h-20 w-20 items-center justify-center rounded-full bg-[#22C55E]">
             <Feather name="truck" size={32} color="#FFFFFF" />
           </View>
-          <Text className="text-base font-JakartaSemiBold text-[#475569]">
+
+          <Text style={{ color: colors.muted, fontSize: 14 }}>
             Join MightyDelivery and start earning.
           </Text>
         </View>
 
+        
         <View className="mt-8" style={{ gap: 16 }}>
-          <DriverInput placeholder="Full Name" icon="user" />
-          <DriverInput placeholder="+967" icon="phone" keyboardType="phone-pad" />
+          <DriverInput
+            placeholder="Full Name"
+            icon="user"
+            variant={variant}
+          />
+          <DriverInput
+            placeholder="+967"
+            icon="phone"
+            keyboardType="phone-pad"
+            variant={variant}
+          />
           <DriverInput
             placeholder="Email (Optional)"
             icon="mail"
             keyboardType="email-address"
+            variant={variant}
           />
+
           <DriverInput
             placeholder="Password (min. 8 characters)"
             icon="lock"
             secureTextEntry
             secureToggle
+            variant={variant}
           />
           <DriverInput
             placeholder="Confirm Password"
             icon="lock"
             secureTextEntry
             secureToggle
+            variant={variant}
           />
         </View>
 
@@ -125,7 +165,10 @@ const CreateAccountScreen = () => {
           </Text>
         </Text>
 
-        <FooterControls variant="light" />
+        <FooterControls
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(prev => !prev)}
+        />
       </ScrollView>
     </SafeAreaView>
   );
