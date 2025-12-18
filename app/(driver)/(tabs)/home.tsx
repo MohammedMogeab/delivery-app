@@ -42,7 +42,7 @@ const HomeTab = () => {
           </View>
 
           <TouchableOpacity className="relative h-11 w-11 items-center justify-center rounded-2xl border border-[#1F2937] bg-[#0F1418]">
-            <Feather name="bell" size={20} color="#F8FAFC" />
+            <Feather name="bell" size={20} color="#F8FAFC" onPress={()=>router.replace('/delivery/notifications')} />
             <View className="absolute -top-1 -right-1 h-5 w-5 items-center justify-center rounded-full bg-[#F87171]">
               <Text className="text-[10px] font-JakartaBold text-white">2</Text>
             </View>
